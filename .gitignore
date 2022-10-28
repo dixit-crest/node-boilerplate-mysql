@@ -1,0 +1,7 @@
+node_modules/
+
+# The file which is generated on sequelize init command
+src/db-config/config.json
+
+.env
+package-lock.json
