@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./index.js",
     "dev": "nodemon ./index.js",
-    "deploy": "git pull && npm install && npx sequelize-cli db:migrate"
+    "deploy": "git pull && npm install && npx sequelize-cli db:migrate && pm2 stop index.js && pm2 start index.js"
   },
   "repository": {
     "type": "git",
