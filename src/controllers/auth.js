@@ -19,6 +19,7 @@ const Models = require("../models");
 const emailChacker = require("deep-email-validator");
 const { sendResponse } = require("../utils/helpers");
 const { sendResetPasswordEmail } = require("../services/email/users");
+const logger = require("../logs/logger");
 
 exports.signup = async (req, res, next) => {
   try {
@@ -96,13 +97,7 @@ exports.signup = async (req, res, next) => {
       message: RECORD_CREATED,
     });
   } catch (error) {
-    console.log(
-      "\n",
-      "Following error occured in : ",
-      __filename,
-      "\n\n",
-      error
-    );
+    logger.error('Whooops! This broke with error: ', error);
     return res.status(500).json(sendResponse(null, 500, SERVER_ERROR));
   }
 };
@@ -228,7 +223,9 @@ exports.resetPassword = async (req, res, next) => {
         );
     }
 
-    const user = await Models.Users.findOne({ where: { email: decoded.email } });
+    const user = await Models.Users.findOne({
+      where: { email: decoded.email },
+    });
 
     if (!user) {
       return res
@@ -264,8 +261,6 @@ exports.resetPassword = async (req, res, next) => {
     }
   } catch (error) {
     console.log("  ::error:: ", error);
-    return res
-      .status(500)
-      .json(sendResponse(null, 500, SERVER_ERROR));
+    return res.status(500).json(sendResponse(null, 500, SERVER_ERROR));
   }
 };
