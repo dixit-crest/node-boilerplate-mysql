@@ -13,11 +13,11 @@ const {
   INVALID_CREDENTIALS,
   JWT_SECRET,
   JWT_EXPIRESIN,
-} = require("../../utils/constants");
+} = require("../utils/constants");
 
-const Models = require("../../models");
+const Models = require("../models");
 const emailChacker = require("deep-email-validator");
-const { sendResponse } = require("../../utils/helpers");
+const { sendResponse } = require("../utils/helpers");
 
 exports.signup = async (req, res, next) => {
   try {

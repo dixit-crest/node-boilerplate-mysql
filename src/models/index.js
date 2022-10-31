@@ -6,29 +6,26 @@ const Sequelize = require("sequelize");
 const process = require("process");
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-const config = require(path.resolve(__dirname, "../db-config/config.json"))[
-  env
-];
+const config = require(path.resolve(__dirname, "../db-config/config.js"))[env];
 const db = {};
-const {
-  DB,
-  USER,
-  PASSWORD,
-  HOST,
-  DIALECT,
-  DB_POOL,
-} = require("../utils/constants");
-let sequelize = new Sequelize(DB, USER, PASSWORD, {
-  host: HOST,
-  dialect: DIALECT,
-  operatorsAliases: 0,
-  pool: DB_POOL, // Optional - Used for Sequelize connection pool configuration
-  define: {
-    // freezeTableName: true, // Enforcing the table name to be equal to the model name
-  },
-  logging: false,
-  // logging: (msg) => console.log(msg),
-});
+const { DB_POOL } = require("../utils/constants");
+
+let sequelize = new Sequelize(
+  config.database,
+  config.username,
+  config.password,
+  {
+    host: config.host,
+    dialect: config.dialect,
+    operatorsAliases: 0,
+    pool: DB_POOL, // Optional - Used for Sequelize connection pool configuration
+    define: {
+      // freezeTableName: true, // Enforcing the table name to be equal to the model name
+    },
+    logging: false,
+    // logging: (msg) => console.log(msg),
+  }
+);
 fs.readdirSync(__dirname)
   .filter((file) => {
     return (

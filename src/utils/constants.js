@@ -1,6 +1,9 @@
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 
+const env = process.env.NODE_ENV || "development";
+const config = require(path.resolve(__dirname, "../db-config/config.js"))[env];
+
 module.exports = {
   BACKEND_BASE_URL: process.env.BACKEND_BASE_URL,
   FRONTEND_BASE_URL: process.env.FRONTEND_BASE_URL,
@@ -9,11 +12,12 @@ module.exports = {
 
   PORT: process.env.PORT,
 
-  DB: process.env.DB,
-  USER: process.env.USER,
-  PASSWORD: process.env.PASSWORD,
-  HOST: process.env.HOST,
-  DIALECT: process.env.DIALECT,
+  USER: config.username,
+  PASSWORD: config.password,
+  DB: config.database,
+  HOST: config.host,
+  DIALECT: config.dialect,
+  
   DB_POOL: {
     max: 5, // maximum number of connection in pool
     min: 0, // minimum number of connection in pool

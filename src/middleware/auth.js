@@ -5,7 +5,7 @@ const { sendResponse } = require("../utils/helpers");
 const Models = require("../models");
 
 // (...roles) =>
-module.exports = async (req, res, next) => {
+module.exports = (...roles) => async (req, res, next) => {
   try {
     const token =
       req.headers["x-access-token"] ||
