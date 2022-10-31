@@ -17,13 +17,19 @@ module.exports = {
   DB: config.database,
   HOST: config.host,
   DIALECT: config.dialect,
-  
+
   DB_POOL: {
     max: 5, // maximum number of connection in pool
     min: 0, // minimum number of connection in pool
     acquire: 30000, // maximum time, in milliseconds, that a connection can be idle before being released
     idle: 10000, // maximum time, in milliseconds, that pool will try to get connection before throwing error
   },
+
+  EMAIL_PORT: process.env.EMAIL_PORT,
+  EMAIL_HOST: process.env.EMAIL_HOST,
+  EMAIL_USER: process.env.EMAIL_USER,
+  EMAIL_PASSWORD: process.env.EMAIL_PASSWORD,
+  EMAIL_FROM: process.env.EMAIL_FROM,
 
   JWT_SECRET: process.env.JWT_SECRET,
   JWT_EXPIRESIN: process.env.JWT_EXPIRESIN,

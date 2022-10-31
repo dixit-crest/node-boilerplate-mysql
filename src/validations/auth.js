@@ -1,0 +1,25 @@
+const Joi = require("joi");
+
+module.exports = {
+  signinSchema: Joi.object({
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).max(30).required(),
+  }),
+
+  signupSchema: Joi.object({
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().min(8).max(30).required(),
+    role: Joi.string().alphanum(),
+  }),
+
+  reqResetPasswordSchema: Joi.object({
+    email: Joi.string().email().required(),
+  }),
+
+  resetPasswordSchema: Joi.object({
+    password: Joi.string().min(8).max(30).required(),
+    token: Joi.string().required(),
+  }),
+};

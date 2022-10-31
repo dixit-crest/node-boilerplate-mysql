@@ -18,16 +18,11 @@ const {
 const Models = require("../models");
 const emailChacker = require("deep-email-validator");
 const { sendResponse } = require("../utils/helpers");
+const { sendResetPasswordEmail } = require("../services/email/users");
 
 exports.signup = async (req, res, next) => {
   try {
-    const { email, password, firstName, lastName } = req.body;
-    if (!(email && password && firstName && lastName)) {
-      return res
-        .status(400)
-        .json(sendResponse(null, 400, "Please provide email and password"));
-    }
-
+    const { email, password } = req.body;
     // not allowing someone to create new SUPER_ADMIN
     if (req.body.role && Number(req.body.role) === USER_TYPES.SUPER_ADMIN) {
       return res
@@ -69,13 +64,13 @@ exports.signup = async (req, res, next) => {
 
     const createdUser = await Models.Users.create({
       ...userObj,
-      role: userObj.role || USER_TYPES.ADMIN,
+      role: userObj.role || USER_TYPES.CUSTOMER,
     });
     let token = jwt.sign(
       {
         id: createdUser.dataValues.id,
         email: createdUser.dataValues.email,
-        role: USER_TYPES.ADMIN,
+        role: userObj.role || USER_TYPES.CUSTOMER,
       },
       JWT_SECRET,
       {
@@ -115,12 +110,7 @@ exports.signup = async (req, res, next) => {
 exports.signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    // check empty request body
-    if (!(email && password)) {
-      return res
-        .status(400)
-        .json(sendResponse(null, 400, "Please provide email and password"));
-    }
+
     const user = await Models.Users.findOne({ where: { email: email } });
     if (!user) {
       return res.status(400).json(sendResponse(null, 400, INVALID_CREDENTIALS));
@@ -181,5 +171,101 @@ exports.signin = async (req, res, next) => {
     return res
       .status(INTERNAL_SERVER_ERROR)
       .json(sendResponse(null, INTERNAL_SERVER_ERROR, SERVER_ERROR));
+  }
+};
+
+exports.reqestResetPasswords = async (req, res, next) => {
+  try {
+    let resetPasswordToken = jwt.sign({ email: req.body.email }, JWT_SECRET, {
+      expiresIn: "1days",
+    });
+
+    // if user exists or not
+    const userExists = await Models.Users.findOne({
+      where: { email: req.body.email },
+    });
+
+    if (!userExists) {
+      return res
+        .status(404)
+        .json(sendResponse(null, 404, "We couldn't find your account."));
+    }
+
+    await Models.Users.update(
+      { passwordToken: resetPasswordToken },
+      {
+        where: { email: req.body.email },
+      }
+    );
+
+    sendResetPasswordEmail(userExists, resetPasswordToken);
+
+    return res.json(
+      sendResponse(null, 200, "Please check your email to reset your password.")
+    );
+  } catch (error) {
+    console.log("  ::error:: ", error);
+    return res.status(500).send(sendResponse(null, 500, SERVER_ERROR));
+  }
+};
+
+exports.resetPassword = async (req, res, next) => {
+  try {
+    const { token, password } = req.body;
+    let decoded = null;
+    try {
+      decoded = jwt.verify(token, JWT_SECRET);
+    } catch (err) {
+      console.log("  :: err ::", err);
+      return res
+        .status(400)
+        .json(
+          sendResponse(
+            null,
+            400,
+            "Your password reset link has been expired, Please try again."
+          )
+        );
+    }
+
+    const user = await Models.Users.findOne({ where: { email: decoded.email } });
+
+    if (!user) {
+      return res
+        .status(400)
+        .json(
+          sendResponse(
+            null,
+            400,
+            "This link has been expired. Please try again"
+          )
+        );
+    }
+
+    if (user.dataValues.passwordToken === token) {
+      let encryptedPassword = bcryptjs.hashSync(password, 8);
+      await Models.Users.update(
+        { passwordToken: null, password: encryptedPassword },
+        { where: { email: decoded.email } }
+      );
+      return res
+        .status(200)
+        .json(sendResponse(null, 200, "Your password has been reset"));
+    } else {
+      return res
+        .status(400)
+        .json(
+          sendResponse(
+            null,
+            400,
+            "Your password reset link has been expired, Please try again."
+          )
+        );
+    }
+  } catch (error) {
+    console.log("  ::error:: ", error);
+    return res
+      .status(500)
+      .json(sendResponse(null, 500, SERVER_ERROR));
   }
 };
