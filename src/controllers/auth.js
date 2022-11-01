@@ -3,10 +3,8 @@ const bcryptjs = require("bcryptjs");
 
 const {
   RECORD_CREATED,
-  BAD_REQUEST,
   INTERNAL_SERVER_ERROR,
   USER_TYPES,
-  CREATED,
   SERVER_ERROR,
   OK,
   RECORDS_FOUND,
@@ -93,7 +91,7 @@ exports.signup = async (req, res, next) => {
       data: {
         user: { ...createdUser.dataValues, token },
       },
-      code: CREATED,
+      code: 201,
       message: RECORD_CREATED,
     });
   } catch (error) {

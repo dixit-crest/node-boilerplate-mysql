@@ -13,7 +13,7 @@ const options = {
   console: {
     level: "debug",
     handleExceptions: true,
-    json: false,
+    json: true,
     colorize: true,
   },
 };
@@ -45,7 +45,7 @@ const logger = winston.createLogger({
   ],
   format: winston.format.combine(
     winston.format.colorize(),
-    winston.format.simple()
+    winston.format.simple(),
   ),
   exitOnError: false,
 });

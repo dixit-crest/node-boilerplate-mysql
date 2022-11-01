@@ -27,6 +27,8 @@ module.exports = async (req, res, next) => {
       return res
         .status(401)
         .json(sendResponse(null, 401, "Session expired, Please re-login"));
+
+    req.user = user.toJSON();
     next();
   } catch (err) {
     console.log(":: err :: ", err);
