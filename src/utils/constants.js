@@ -10,6 +10,9 @@ module.exports = {
 
   NODE_ENV: process.env.NODE_ENV,
 
+  /**
+   * On which port should this backend run
+   */
   PORT: process.env.PORT,
 
   USER: config.username,
@@ -25,6 +28,10 @@ module.exports = {
     idle: 10000, // maximum time, in milliseconds, that pool will try to get connection before throwing error
   },
 
+  /**
+   * Configuration for sending emails,
+   * use mailtrap while developing
+   */
   EMAIL_PORT: process.env.EMAIL_PORT,
   EMAIL_HOST: process.env.EMAIL_HOST,
   EMAIL_USER: process.env.EMAIL_USER,

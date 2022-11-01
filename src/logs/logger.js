@@ -1,5 +1,9 @@
 const winston = require("winston");
 
+/**
+ * Options for winston logger, You need to log with `logger.info`, `logger.error`
+ * in order to use this. currently its being logged in console.log
+ */
 const options = {
   file: {
     level: "info",

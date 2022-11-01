@@ -9,6 +9,14 @@ const {
 const Models = require("../models");
 const { sendResponse } = require("../utils/helpers");
 
+/**
+ * method : `POST`
+ * 
+ * url : `BACKEND_BASE_URL/api/v1/notes`
+ * 
+ * Takes `title`, `content` in request body and
+ * create the note for logged in user
+ */
 exports.createNote = async (req, res, next) => {
   try {
     const { title, content } = req.body;
@@ -29,11 +37,17 @@ exports.createNote = async (req, res, next) => {
   }
 };
 
+/**
+ * method : `GET`
+ * 
+ * url : `BACKEND_BASE_URL/api/v1/notes`
+ * 
+ * Gives all notes for logged in user
+ */
 exports.getUsersNotes = async (req, res, next) => {
   try {
     const notes = await Models.Notes.findAll({
       where: { user: req.user.id },
-      attributes: { exclude: "user" },
     });
     res.status(200).json({
       data: notes,
@@ -47,6 +61,13 @@ exports.getUsersNotes = async (req, res, next) => {
   }
 };
 
+/**
+ * method : `GET`
+ * 
+ * url : `BACKEND_BASE_URL/api/v1/notes/all`
+ * 
+ * Gives all notes from all users
+ */
 exports.getAllNotes = async (req, res, next) => {
   try {
     const notes = await Models.Notes.findAll({
@@ -64,6 +85,13 @@ exports.getAllNotes = async (req, res, next) => {
   }
 };
 
+/**
+ * method : `DELETE`
+ * 
+ * url : `BACKEND_BASE_URL/api/v1/notes/:id` id : noteId
+ * 
+ * Gives all notes from all users
+ */
 exports.deleteNote = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -85,6 +113,14 @@ exports.deleteNote = async (req, res, next) => {
   }
 };
 
+/**
+ * method : `PUT`
+ * 
+ * url : `BACKEND_BASE_URL/api/v1/notes/:id` id : noteId
+ * 
+ * Takes `title` & `content` in request body and edits the
+ * note with passed `id`
+ */
 exports.editNote = async (req, res, next) => {
   try {
     const { id } = req.params;

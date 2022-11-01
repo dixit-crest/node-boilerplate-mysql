@@ -1,6 +1,14 @@
 "use strict";
 
 /** @type {import('sequelize-cli').Migration} */
+
+/**
+ * Table structure for `Notes`
+ * 
+ * File to create table in mySql. General fields of a user has
+ * been included, You can modify and run `npx sequelize-cli db:migrate`
+ * to create tables
+ */
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("Notes", {

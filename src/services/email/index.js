@@ -16,6 +16,11 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+/**
+ * General use function for sending emails
+ * 
+ * @param {{from:string, to:string, subject: string, html: Html}} mailOptions 
+ */
 const sendMail = (
   mailOptions = {
     from: EMAIL_FROM,

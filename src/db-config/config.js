@@ -1,6 +1,12 @@
 const path = require("path");
 require("dotenv").config({ path: path.join(__dirname, "../../.env") });
-
+/**
+ * This is auto-generated config file for sequelize-cli. 
+ * all the variables will be token from the `.env. file 
+ * 
+ * WHICH CONFIG TO RUN SEQUELIZE-CLI COMMANDS WITH WILL BE 
+ * DECIDED BY `NODE_ENV` IN `.ENV` FILE.
+ */
 module.exports = {
   development: {
     username: process.env.DEV_DB_USERNAME,

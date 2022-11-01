@@ -1,5 +1,8 @@
 const Joi = require("joi");
 
+/**
+ * Structure of request body to be validated
+ */
 module.exports = {
   signinSchema: Joi.object({
     email: Joi.string().email().required(),
@@ -20,6 +23,7 @@ module.exports = {
 
   resetPasswordSchema: Joi.object({
     password: Joi.string().min(8).max(30).required(),
+    confirmPassword: Joi.string().min(8).max(30).required(),
     token: Joi.string().required(),
   }),
 };

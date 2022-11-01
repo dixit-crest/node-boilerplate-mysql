@@ -1,5 +1,11 @@
 "use strict";
 
+/**
+ * Represents `Users` Table 
+ * 
+ * Allows various methods to
+ * interect with table. Association will be return below.
+ */
 module.exports = (sequelize, DataTypes) => {
   const Users = sequelize.define(
     "Users",

@@ -4,6 +4,13 @@ const path = require("path");
 const { FRONTEND_BASE_URL } = require("../../utils/constants");
 
 module.exports = {
+
+  /**
+   * Sends an email to reset the password.
+   * 
+   * @param {Object} user - User object
+   * @param {String} resetPasswordToken - reset password token 
+   */
   sendResetPasswordEmail: (user, resetPasswordToken) => {
     ejs.renderFile(
       path.join(__dirname, "./templates/resetPassword.ejs"),

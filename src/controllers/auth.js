@@ -3,10 +3,8 @@ const bcryptjs = require("bcryptjs");
 
 const {
   RECORD_CREATED,
-  INTERNAL_SERVER_ERROR,
   USER_TYPES,
   SERVER_ERROR,
-  OK,
   RECORDS_FOUND,
   INVALID_CREDENTIALS,
   JWT_SECRET,
@@ -19,6 +17,16 @@ const { sendResponse } = require("../utils/helpers");
 const { sendResetPasswordEmail } = require("../services/email/users");
 const logger = require("../logs/logger");
 
+/**
+ * method : POST
+ *
+ * url : `BACKEND_BASE_URL/api/v1/auth/signup`
+ *
+ * Takes `email`, `password`, `firstName` & `lastName` as required
+ * in request body and creates a new user.
+ *
+ * Default user type is set to `CUSTOMER` from USER_TYPES.CUSTOMER
+ */
 exports.signup = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -95,11 +103,18 @@ exports.signup = async (req, res, next) => {
       message: RECORD_CREATED,
     });
   } catch (error) {
-    logger.error('Whooops! This broke with error: ', error);
+    logger.error("Whooops! This broke with error: ", error);
     return res.status(500).json(sendResponse(null, 500, SERVER_ERROR));
   }
 };
 
+/**
+ * method : POST
+ *
+ * url : `BACKEND_BASE_URL/api/v1/auth/signin`
+ *
+ * Takes `email`, `password` in request body and returns user data with access token
+ */
 exports.signin = async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -148,25 +163,24 @@ exports.signin = async (req, res, next) => {
           {
             ...response.toJSON(),
           },
-          OK,
+          200,
           RECORDS_FOUND
         )
       );
     }
   } catch (error) {
-    console.log(
-      "\n",
-      "Following error occured in : ",
-      __filename,
-      "\n\n",
-      error
-    );
-    return res
-      .status(INTERNAL_SERVER_ERROR)
-      .json(sendResponse(null, INTERNAL_SERVER_ERROR, SERVER_ERROR));
+    console.log(error);
+    return res.status(500).json(sendResponse(null, 500, SERVER_ERROR));
   }
 };
 
+/**
+ * method : POST
+ * 
+ * url : `BACKEND_BASE_URL/api/v1/auth/signin`
+ * 
+ * Takes `email` in request body and send a mail to reset the password  
+ */
 exports.reqestResetPasswords = async (req, res, next) => {
   try {
     let resetPasswordToken = jwt.sign({ email: req.body.email }, JWT_SECRET, {
@@ -202,6 +216,15 @@ exports.reqestResetPasswords = async (req, res, next) => {
   }
 };
 
+/**
+ * method : `POST`
+ * 
+ * url : `BACKEND_BASE_URL/api/v1/auth/signin`
+ * 
+ * Takes `password`, `confirmPassword`, & `token` in request body 
+ * resets the password if `resetPassword` token is still valid
+ * then `resetPassword` token will be set to null 
+ */
 exports.resetPassword = async (req, res, next) => {
   try {
     const { token, password } = req.body;

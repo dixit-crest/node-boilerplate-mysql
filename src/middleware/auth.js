@@ -3,7 +3,14 @@ const { UNAUTHORIZE_ERROR, JWT_SECRET } = require("../utils/constants");
 const { sendResponse } = require("../utils/helpers");
 const Models = require("../models");
 
-// (...roles) =>
+/**
+ * Takes access token as `Bearer` or `x-access-token` from header
+ * if token is valid then api will be accessible otherwise returned `401`
+ * with session expired error message
+ * 
+ * Create a curried function with `(...roles) =>` and uncomment role code 
+ * to give access based on roles
+ */
 module.exports = async (req, res, next) => {
   try {
     const token =

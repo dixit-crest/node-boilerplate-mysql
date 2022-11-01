@@ -1,4 +1,12 @@
 'use strict';
+
+/**
+ * Table structure for `Users`
+ * 
+ * File to create table in mySql. General fields of a user has
+ * been included, You can modify and run `npx sequelize-cli db:migrate`
+ * to create tables
+ */
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {

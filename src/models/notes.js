@@ -1,5 +1,10 @@
 "use strict";
-
+/**
+ * Represents `Notes` Table 
+ * 
+ * Allows various methods to
+ * interect with table. Association will be return below.
+ */
 module.exports = (sequelize, DataTypes) => {
   const Notes = sequelize.define(
     "Notes",
