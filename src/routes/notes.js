@@ -21,6 +21,13 @@ moduleRoute.route("/").get([auth], controller.getUsersNotes);
 /**
  * method: `GET`
  * 
+ * url: `BACKEND_BASE_URL/api/v1/notes/:id`
+ */
+ moduleRoute.route("/:id").get([auth], controller.getUsersNote);
+
+/**
+ * method: `GET`
+ * 
  * url: `BACKEND_BASE_URL/api/v1/notes/all`
  */
 moduleRoute.route("/all").get([auth], controller.getAllNotes);
